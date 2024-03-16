@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace GenerateDto
 {
     using System.Collections.Generic;
@@ -10,6 +12,7 @@ namespace GenerateDto
         {
             var deserializer = new DeserializerBuilder()
                 .WithNamingConvention(UnderscoredNamingConvention.Instance)
+                .IgnoreUnmatchedProperties()
                 .Build();
 
             return deserializer.Deserialize<SwaggerConfig>(yml);
@@ -179,5 +182,17 @@ namespace GenerateDto
         public int Maximum { get; set; }
 
         public string Description { get; set; }
+
+        public bool Nullable { get; set; }
+
+        //[YamlMember(Alias = "additionalProperties")]
+        //[DefaultValue(null)]
+        //public TypeModelAdditionalPropertiesModel AdditionalProperties { get; set; } = null;
     }
+
+    public class TypeModelAdditionalPropertiesModel
+    {
+        public string Type { get; set; }
+    }
+
 }

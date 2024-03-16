@@ -16,10 +16,12 @@ namespace GenerateDto
             { "getAllCountries", "Countries" },
             { "getAllGenders", "Genders" },
             { "getAllGenres", "Genres" },
+            { "getAllEpisodes", "AllEpisodes" },
             { "getAllLanguages", "Languages" },
             { "getAllLists", "Lists" },
             { "getAllMovie", "Movies" },
             { "getAllMovieStatuses", "MovieStatuses" },
+            { "getAllPeople", "AllPeople" },
             { "getAllPeopleTypes", "PeopleTypes" },
             { "getAllSeasons", "Seasons" },
             { "getAllSeries", "AllSeries" },
@@ -41,22 +43,27 @@ namespace GenerateDto
             { "getEpisodeTranslation", "EpisodeTranslation" },
             { "getGenreBase", "Genre" },
             { "getList", "List" },
+            { "getListBySlug", "ListBySlug"},
             { "getListExtended", "ListExtended" },
             { "getListTranslation", "ListTranslation" },
             { "getMovieBase", "Movie" },
+            { "getMovieBaseBySlug", "MovieBySlug" },
             { "getMovieExtended", "MovieExtended" },
             { "getMovieTranslation", "MovieTranslation" },
             { "getPeopleBase", "People" },
             { "getPeopleExtended", "PeopleExtended" },
             { "getPeopleTranslation", "PeopleTranslation" },
             { "getSearchResults", "Search" },
+            { "getSearchResultsByRemoteId", "SearchResultsByRemoteId"},
             { "getSeasonBase", "Season" },
             { "getSeasonExtended", "SeasonExtended" },
             { "getSeasonTranslation", "SeasonTranslation" },
             { "getSeasonTypes", "SeasonTypes" },
             { "getSeriesBase", "Series" },
+            { "getSeriesBaseBySlug", "SeriesBySlug"},
             { "getSeriesExtended", "SeriesExtended" },
             { "getSeriesEpisodes", "SeriesEpisodes" },
+            { "getSeriesNextAired", "SeriesNextAired" },
             { "getSeriesSeasonEpisodesTranslated", "SeriesSeasonEpisodesTranslated" },
             { "getSeriesTranslation", "SeriesTranslation" },
             { "getSeriesArtworks", "SeriesArtworks" },
@@ -64,6 +71,8 @@ namespace GenerateDto
             { "getAllInspirationTypes", "InspirationTypes" },
             { "getMoviesFilter", "MoviesFilter" },
             { "getSeriesFilter", "SeriesFilter" },
+            { "getUserInfo", "UserInfo"},
+            { "getUserInfoById", "UserInfoById"},
         };
 
         private static readonly List<PropertyOverrideModel> PropertyOverrides = new()
@@ -1031,7 +1040,7 @@ namespace GenerateDto
 
         private static string GetType(string fieldName, TypeModel typeModel)
         {
-            return typeModel.Type switch
+            var mappedType = typeModel.Type switch
             {
                 "string" => "string",
                 "number" => fieldName == "id" ? "long" : "int",
@@ -1040,6 +1049,19 @@ namespace GenerateDto
                 "array" => GetComplexType(fieldName, typeModel.Items) + "[]",
                 _ => throw new ApplicationException($"Unknown type `{typeModel.Type}`."),
             };
+
+            //if (typeModel.Nullable)
+            //{
+            //    mappedType = mappedType switch
+            //    {
+            //        "long" => "long?",
+            //        "int" => "int?",
+            //        "bool" => "bool?",
+            //        _ => mappedType
+            //    };
+            //}
+
+            return mappedType;
         }
 
         private static void ApplyDtoPropertyOverrides(NamespaceModel namespaceModel)

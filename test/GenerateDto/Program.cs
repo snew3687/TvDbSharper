@@ -13,9 +13,11 @@
 
         private static void Main()
         {
-            string yml = FetchSwaggerConfig().GetAwaiter().GetResult();
+            // Steve Uncommen below to fetch up to date YAML
+            //string yml = FetchSwaggerConfig().GetAwaiter().GetResult();
+            //File.WriteAllText("../../../../../test/GenerateDto/swagger.yml", yml);
 
-            File.WriteAllText("../../../../../test/GenerateDto/swagger.yml", yml);
+            string yml = File.ReadAllText("../../../../../test/GenerateDto/swagger.yml");
 
             var swaggerConfig = SwaggerConfigParser.Parse(yml);
 
